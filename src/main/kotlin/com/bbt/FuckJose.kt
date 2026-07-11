@@ -17,7 +17,6 @@ object FuckJose : ModInitializer {
 		LOGGER.info("Hello Fabric world!")
 	}
 
-	
 
 	fun id(path: String): Identifier
 		= Identifier.fromNamespaceAndPath(MOD_ID, path)

@@ -3,7 +3,6 @@
   "package": "com.bbt.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "com.bbt.client.mixin.ClientChatReceivedMixin",
     "ExampleMixin"
   ],
   "injectors": {

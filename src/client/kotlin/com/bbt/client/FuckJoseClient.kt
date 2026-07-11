@@ -1,9 +1,12 @@
 package com.bbt.client
 
+import com.bbt.client.chatCommands.BasicKuudraPV
 import net.fabricmc.api.ClientModInitializer
+
+
 
 object FuckJoseClient : ClientModInitializer {
 	override fun onInitializeClient() {
-		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
+		BasicKuudraPV.register()
 	}
 }

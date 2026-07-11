@@ -1,9 +1,8 @@
-package com.bbt.client.Features.phase;
+package com.bbt.client.phase;
 
 //Taken from Phantomaddons cause im pretty stupid
 
-import com.kuudrahelper.KuudraHelperMod;
-import com.kuudrahelper.utils.KuudraTierDetector;
+import com.bbt.client.utils.IdentifyTier;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.Minecraft;
@@ -48,7 +47,7 @@ public final class KuudraPhaseTracker {
         } else if (msg.contains("Great work collecting my supplies")) {
             setPhase(KuudraPhaseTracker.Phase.BUILD);
         } else if (msg.contains("The Ballista is finally ready")) {
-            int tier = KuudraTierDetector.getTier();
+            int tier = IdentifyTier.getTier();
             setPhase(tier != 1 && tier != 2 ? KuudraPhaseTracker.Phase.EATEN : KuudraPhaseTracker.Phase.BOSS);
         } else if (msg.contains("has been eaten by Kuudra!")) {
             runActive = true;
