@@ -1,7 +1,7 @@
 package com.bbt.client.chatCommands
 
 import com.bbt.FuckJose.MOD_ID
-import com.bbt.client.ModConfigManager // Import your config manager
+import com.bbt.client.ModConfigManager
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
@@ -25,7 +25,7 @@ object BasicKuudraPV {
             val rawText = message.string
             val text = rawText.replace(Regex("§[0-9a-fk-orxX]"), "")
 
-            val commandRegex = Regex("^Party\\s+>.*?!kuudra\\s+(\\S+)")
+            val commandRegex = Regex("^\\s*Party\\s+>\\s+[^:]+:\\s*!kuudra\\s+(\\S+)", RegexOption.IGNORE_CASE)
             val commandMatch = commandRegex.find(text)
 
             if (commandMatch != null) {
@@ -34,9 +34,8 @@ object BasicKuudraPV {
                 return@register
             }
 
-            // Checks the global config manager state cleanly
             if (ModConfigManager.config.autoOnJoin) {
-                val joinRegex = Regex("(\\w+)\\s+joined\\s+the\\s+party\\.")
+                val joinRegex = Regex("^\\s*(?:\\[[^\\]]+\\]\\s+)?(\\w+)\\s+joined\\s+the\\s+party\\.")
                 val joinMatch = joinRegex.find(text)
 
                 if (joinMatch != null) {
@@ -50,7 +49,6 @@ object BasicKuudraPV {
     fun fetchKuudra(playerName: String) {
         logger?.info("Requesting Kuudra data from Worker for: $playerName")
 
-        // Step 2: Query Cloudflare Worker on background thread
         modScope.launch {
             val statsJson = getKuudraStats(playerName)
 
