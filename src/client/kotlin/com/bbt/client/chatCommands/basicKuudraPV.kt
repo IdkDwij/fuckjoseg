@@ -35,12 +35,15 @@ object BasicKuudraPV {
             }
 
             if (ModConfigManager.config.autoOnJoin) {
-                val joinRegex = Regex("^\\s*(?:\\[[^\\]]+\\]\\s+)?(\\w+)\\s+joined\\s+the\\s+party\\.")
-                val joinMatch = joinRegex.find(text)
+                // Kuudra Party Finder Join (e.g., "Party Finder > EricDiazDeLeon joined the group!" fuck that guy 1st comp)
+                val partyFinderRegex = Regex("^\\s*Party\\s+Finder\\s+>\\s+(\\w+)\\s+joined\\s+the\\s+group!")
+                val partyFinderMatch = partyFinderRegex.find(text)
 
-                if (joinMatch != null) {
-                    val joinedPlayerName = joinMatch.groupValues[1].trim()
-                    fetchKuudra(joinedPlayerName)
+
+                if (partyFinderMatch != null) {
+                    val pfPlayerName = partyFinderMatch.groupValues[1].trim()
+                    val userName = MCClient.player?.gameProfile?.name
+                    if (userName != null && !pfPlayerName.equals(userName, ignoreCase = true)) fetchKuudra(pfPlayerName);
                 }
             }
         }
@@ -52,19 +55,15 @@ object BasicKuudraPV {
         modScope.launch {
             val statsJson = getKuudraStats(playerName)
 
-            // Format the display string based on Worker JSON payload
             val outputMessage = if (statsJson != null && statsJson.get("success")?.asBoolean == true) {
                 val magicalPower = statsJson.get("magicalPower").asLong
                 val kuudraObj = statsJson.getAsJsonObject("kuudraCompletions")
                 val infernalRuns = kuudraObj.get("infernal").asInt
-                "Runs: $infernalRuns | MP: $magicalPower"
-            } else {
-                "Error: Could not retrieve stats from API backend."
-            }
+                "$playerName | Runs: $infernalRuns | MP: $magicalPower"
+            } else  "$playerName | Error : Could not retrieve stats.";
 
-            // Step 3: Switch back to main thread to submit game macro command safely
             MCClient.execute {
-                MCClient.player?.connection?.sendCommand("pc [$MOD_ID] $outputMessage")
+                MCClient.player?.connection?.sendCommand("pc ${ModConfigManager.config.displayPrefix} $outputMessage")
             }
         }
     }
