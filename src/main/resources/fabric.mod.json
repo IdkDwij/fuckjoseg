@@ -2,10 +2,10 @@
 	"schemaVersion": 1,
 	"id": "fuckjose",
 	"version": "${version}",
-	"name": "FuckJose",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "VackyUtils",
+	"description": "Kuudra Utilities",
 	"authors": [
-		"Me!"
+		"Vackyton"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
